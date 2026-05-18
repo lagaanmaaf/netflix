@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life of Romeo & Juliet</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=Lato:wght@300;400;700&family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+<!-- Link to external CSS -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ── HIDDEN FILE INPUTS ── -->
+<input type="file" id="profile-upload" accept="image/*" style="display:none">
+<input type="file" id="upload-credits-photo" accept="image/*" style="display:none">
+<input type="file" id="upload-song" accept="audio/*" style="display:none">
+
+<!-- Hidden canvas for video thumbnail capture -->
+<canvas id="thumb-capture-canvas" style="display:none;"></canvas>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══ MUSIC PLAYER (Floating) ══ -->
+<div id="music-player">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+    <div class="mp-vinyl" id="mp-vinyl"></div>
+    <div>
+      <div class="mp-title" id="mp-song-title">Our Song ♪</div>
+      <div class="mp-sub">Romeo ♥ Juliet</div>
+    </div>
+  </div>
+  <div class="mp-controls">
+    <button class="mp-btn" id="mp-play-btn" onclick="toggleMusic()">▶</button>
+    <div class="mp-progress" onclick="seekMusic(event)" id="mp-progress-bar">
+      <div class="mp-progress-fill" id="mp-fill"></div>
+    </div>
+    <button class="mp-btn" style="font-size:0.85rem;" onclick="document.getElementById('upload-song').click()">🎵</button>
+  </div>
+</div>
+<button class="mp-toggle" onclick="toggleMusicPlayer()" title="Our Song">🎵</button>
+
+<!-- ══ PAGE 1: INTRO ══ -->
+<section id="intro">
+  <canvas id="starfield"></canvas>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" class="intro-logo" alt="Netflix">
+  <div class="tagline">✨ A Story Worth Watching ✨</div>
+  <button class="enter-btn" onclick="showHome()">▶ &nbsp;WATCH NOW</button>
+</section>
+
+<!-- ══ PAGE 2: HOME ══ -->
+<div id="home">
+  <nav class="navbar" id="navbar">
+    <div class="nav-left">
+      <a href="#" onclick="showHome()">
+        <img class="netflix-full-logo" src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix">
+      </a>
+      <nav>
+        <a href="#" class="active" onclick="showHome()">Home</a>
+        <a href="#" onclick="showGridPage(event)">All Memories</a>
+        <a href="#" onclick="showTimeline(event)">Our Story</a>
+      </nav>
+    </div>
+    <div class="nav-right">
+      <span class="icon">🔍</span>
+      <span class="icon">🔔</span>
+      <div class="profile-wrapper">
+        <div class="profile-avatar" style="cursor: default; pointer-events: none;">
+          <img id="profile-img" src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="Profile">
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero" id="hero-section" onclick="handleHeroPlay(event)">
+    <img class="hero-media" id="hero-img-el" src="https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=1600&q=80" alt="Hero">
+    <video class="hero-media hero-video" id="hero-video" loop muted playsinline>
+      <source id="hero-video-src" src="video.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+    <div class="hero-content" onclick="event.stopPropagation()">
+      <div class="hero-badge">♥ &nbsp;Series</div>
+      <h1 class="hero-title">Life of<br><span>Romeo & Juliet</span></h1>
+      <div class="hero-meta">
+        <span class="match">💯 Perfect Match</span>
+        <span class="year">Since Day 1</span>
+        <span class="hero-rating">❤️ Rated: Soulmates</span>
+      </div>
+      <p class="hero-desc">A story of two hearts that found each other in a universe full of strangers — and somehow, chose each other every single day.</p>
+      <div class="hero-btns">
+        <button class="btn-play" onclick="handleHeroPlay(event)">▶ &nbsp;Play</button>
+        <button class="btn-info" onclick="showCredits()">ℹ &nbsp;More Info</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPECIAL FEATURES ROW -->
+  <section class="special-row fade-in">
+    <div class="special-row-title">✨ Special Features</div>
+    <div class="special-cards">
+      <div class="sp-card" onclick="showLoveLetter()">
+        <div class="sp-card-bg"></div>
+        <div class="sp-card-overlay"></div>
+        <div class="sp-card-content">
+          <div class="sp-card-icon">💌</div>
+          <div class="sp-card-title">Love Letter</div>
+          <div class="sp-card-sub">Words from the heart, just for you</div>
+        </div>
+      </div>
+      <div class="sp-card" onclick="showTimeline(event)">
+        <div class="sp-card-bg"></div>
+        <div class="sp-card-overlay"></div>
+        <div class="sp-card-content">
+          <div class="sp-card-icon">📅</div>
+          <div class="sp-card-title">Our Timeline</div>
+          <div class="sp-card-sub">Every milestone, forever remembered</div>
+        </div>
+      </div>
+      <div class="sp-card" onclick="showReasons()">
+        <div class="sp-card-bg"></div>
+        <div class="sp-card-overlay"></div>
+        <div class="sp-card-content">
+          <div class="sp-card-icon">💕</div>
+          <div class="sp-card-title">Why I Love You</div>
+          <div class="sp-card-sub">10 reasons — tap each to reveal</div>
+        </div>
+      </div>
+      <div class="sp-card" onclick="showPromises()">
+        <div class="sp-card-bg"></div>
+        <div class="sp-card-overlay"></div>
+        <div class="sp-card-content">
+          <div class="sp-card-icon">🤝</div>
+          <div class="sp-card-title">My Promises</div>
+          <div class="sp-card-sub">Written from the soul, signed with love</div>
+        </div>
+      </div>
+      <div class="sp-card" onclick="showStarWish()">
+        <div class="sp-card-bg"></div>
+        <div class="sp-card-overlay"></div>
+        <div class="sp-card-content">
+          <div class="sp-card-icon">⭐</div>
+          <div class="sp-card-title">Wish Upon a Star</div>
+          <div class="sp-card-sub">Click any star to find a hidden message</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR ROW -->
+  <section class="row-section fade-in">
+    <div class="row-title">Popular Memories</div>
+    <div class="row-cards" id="popular-row">
+      <div class="card" id="pop-card-1" onclick="handleGlobalCardClick(this)"><img id="pop-img-1" src="card1.jpg" alt="Card 1"><div class="top10">❤️ #1</div><div class="card-num">1</div></div>
+      <div class="card" id="pop-card-2" onclick="handleGlobalCardClick(this)"><img id="pop-img-2" src="card2.jpg" alt="Card 2"><div class="card-num">2</div></div>
+      <div class="card" id="pop-card-3" onclick="handleGlobalCardClick(this)"><img id="pop-img-3" src="card3.jpg" alt="Card 3"><div class="card-num">3</div></div>
+      <div class="card" id="pop-card-4" onclick="handleGlobalCardClick(this)"><img id="pop-img-4" src="card4.jpg" alt="Card 4"><div class="card-num">4</div></div>
+      <div class="card" id="pop-card-5" onclick="handleGlobalCardClick(this)"><img id="pop-img-5" src="card5.jpg" alt="Card 5"><div class="card-num">5</div></div>
+      <div class="card" id="pop-card-6" onclick="handleGlobalCardClick(this)"><img id="pop-img-6" src="card6.jpg" alt="Card 6"><div class="view-all-overlay" onclick="showGridPage(event,'popular-row')"><span>View All ➔</span></div><div class="card-num">6</div></div>
+      <div class="card extra-card" id="pop-card-7" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="pop-img-7" src="21.jpg" alt="Card 7"><div class="card-num">7</div></div>
+      <div class="card extra-card" id="pop-card-8" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="pop-img-8" src="22.jpg" alt="Card 8"><div class="card-num">8</div></div>
+      <div class="card extra-card" id="pop-card-9" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="pop-img-9" src="23.jpg" alt="Card 9"><div class="card-num">9</div></div>
+      <div class="card extra-card" id="pop-card-10" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="pop-img-10" src="24.jpg" alt="Card 10"><div class="card-num">10</div></div>
+      <div class="card extra-card" id="pop-card-11" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="pop-img-11" src="25.jpg" alt="Card 11"><div class="card-num">11</div></div>
+      <div class="card extra-card" id="pop-card-12" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="pop-img-12" src="26.jpg" alt="Card 12"><div class="card-num">12</div></div>
+      <div class="card extra-card" id="pop-card-13" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="pop-img-13" src="27.jpg" alt="Card 13"><div class="card-num">13</div></div>
+      <div class="card extra-card" id="pop-card-14" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="pop-img-14" src="28.jpg" alt="Card 14"><div class="card-num">14</div></div>
+    </div>
+  </section>
+
+  <!-- Birthday Celebration ROW -->
+  <section class="row-section fade-in">
+    <div class="row-title">Birthday Celebration</div>
+    <div class="row-cards" id="started-row">
+      <div class="card" id="start-card-1" onclick="handleGlobalCardClick(this)"><img id="start-img-1" src="imi1.jpg" alt="Start 1"><div class="card-num">1</div></div>
+      <div class="card" id="start-card-2" onclick="handleGlobalCardClick(this)"><img id="start-img-2" src="imi2.jpg" alt="Start 2"><div class="card-num">2</div></div>
+      <div class="card" id="start-card-3" onclick="handleGlobalCardClick(this)"><img id="start-img-3" src="imi3.jpg" alt="Start 3"><div class="card-num">3</div></div>
+      <div class="card" id="start-card-4" onclick="handleGlobalCardClick(this)"><img id="start-img-4" src="imi4.jpg" alt="Start 4"><div class="card-num">4</div></div>
+      <div class="card" id="start-card-5" onclick="handleGlobalCardClick(this)"><img id="start-img-5" src="imi5.jpg" alt="Start 5"><div class="card-num">5</div></div>
+      <div class="card" id="start-card-6" onclick="handleGlobalCardClick(this)"><img id="start-img-6" src="imi6.jpg" alt="Start 6"><div class="view-all-overlay" onclick="showGridPage(event,'started-row')"><span>View All ➔</span></div><div class="card-num">6</div></div>
+      <div class="card extra-card" id="start-card-7" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="start-img-7" src="imi7.jpg" alt="Start 7"><div class="card-num">7</div></div>
+    </div>
+  </section>
+
+  <!-- FAREWELL ROW -->
+  <section class="row-section fade-in">
+    <div class="row-title">Where We Got Farewell</div>
+    <div class="row-cards" id="farewell-row">
+      <div class="card" id="farewell-card-1" onclick="handleGlobalCardClick(this)"><img id="farewell-img-1" src="f1.jpg" alt="Farewell 1"><div class="card-num">1</div></div>
+      <div class="card" id="farewell-card-2" onclick="handleGlobalCardClick(this)"><img id="farewell-img-2" src="f2.jpg" alt="Farewell 2"><div class="card-num">2</div></div>
+      <div class="card" id="farewell-card-3" onclick="handleGlobalCardClick(this)"><img id="farewell-img-3" src="f3.jpg" alt="Farewell 3"><div class="card-num">3</div></div>
+      <div class="card" id="farewell-card-4" onclick="handleGlobalCardClick(this)"><img id="farewell-img-4" src="f4.jpg" alt="Farewell 4"><div class="card-num">4</div></div>
+      <div class="card" id="farewell-card-5" onclick="handleGlobalCardClick(this)"><img id="farewell-img-5" src="f5.jpg" alt="Farewell 5"><div class="card-num">5</div></div>
+      <div class="card" id="farewell-card-6" onclick="handleGlobalCardClick(this)"><img id="farewell-img-6" src="f6.jpg" alt="Farewell 6"><div class="view-all-overlay" onclick="showGridPage(event,'farewell-row')"><span>View All ➔</span></div><div class="card-num">6</div></div>
+      <div class="card extra-card" id="farewell-card-7" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="farewell-img-7" src="f7.jpg" alt="Farewell 7"><div class="card-num">7</div></div>
+      <div class="card extra-card" id="farewell-card-8" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="farewell-img-8" src="f8.jpg" alt="Farewell 8"><div class="card-num">8</div></div>
+      <div class="card extra-card" id="farewell-card-9" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="farewell-img-9" src="f9.jpg" alt="Farewell 9"><div class="card-num">9</div></div>
+      <div class="card extra-card" id="farewell-card-10" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="farewell-img-10" src="f10.jpg" alt="Farewell 10"><div class="card-num">10</div></div>
+      <div class="card extra-card" id="farewell-card-11" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="farewell-img-11" src="f11.jpg" alt="Farewell 11"><div class="card-num">11</div></div>
+      <div class="card extra-card" id="farewell-card-12" onclick="handleGlobalCardClick(this)" style="display:none;"><img id="farewell-img-12" src="f12.jpg" alt="Farewell 12"><div class="card-num">12</div></div>
+    </div>
+  </section>
+
+  <!-- RECENTLY WATCHED -->
+  <section class="row-section fade-in" id="recently-watched-section" style="display:none;padding-bottom:4rem;">
+    <div class="row-title">Recently Watched</div>
+    <div class="row-cards" id="recently-watched-cards"></div>
+  </section>
+</div>
+
+<!-- ══ GRID PAGE ══ -->
+<div id="grid-page">
+  <div class="grid-header">
+    <button onclick="showHome()">←</button>
+    <h2>All Memories</h2>
+  </div>
+  <div class="grid-container" id="grid-container"></div>
+</div>
+
+<!-- ══ VIDEO PLAYER ══ -->
+<div id="video-player">
+  <div class="video-topbar">
+    <button class="back" onclick="closeVideoPlayer()">← Back</button>
+    <div class="vtitle">Life of Romeo & Juliet</div>
+  </div>
+  <video id="fs-video" controls playsinline></video>
+</div>
+
+<!-- ══ SLIDESHOW ══ -->
+<div id="video-page">
+  <div class="video-topbar">
+    <button class="back" onclick="showHome()">← Back</button>
+    <div class="vtitle">Life of Romeo & Juliet — The Story</div>
+  </div>
+  <button class="credits-btn-overlay" onclick="showCredits()">♥ See Credits</button>
+  <div class="video-container">
+    <div class="slideshow" id="slideshow"></div>
+    <div class="slide-controls">
+      <button onclick="prevSlide()">◀</button>
+      <div class="slide-dots" id="dots"></div>
+      <button onclick="nextSlide()">▶</button>
+    </div>
+    <div class="progress-timeline"><div class="progress-timeline-fill" id="slideProgress" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- ══ LOVE LETTER PAGE ══ -->
+<div id="love-letter-page">
+  <div class="page-back-bar">
+    <button onclick="showHome()">←</button>
+    <div class="vtitle">💌 A Letter For You</div>
+  </div>
+  <div class="letter-paper">
+    <div class="letter-date" id="letter-date"></div>
+    <div class="letter-salutation">My Dearest Juliet,</div>
+    <div class="letter-body" id="letter-body"></div>
+    <div class="letter-sign">— Romeo ❤️</div>
+  </div>
+  <button class="back-btn-letter" onclick="showHome()">↩ Back to Home</button>
+</div>
+
+<!-- ══ TIMELINE PAGE ══ -->
+<div id="timeline-page">
+  <div class="page-back-bar">
+    <button onclick="showHome()">←</button>
+    <div class="vtitle">📅 Our Timeline</div>
+  </div>
+  <div class="timeline-header">
+    <h2>Our <span>Story</span></h2>
+    <p>Every chapter, every moment, every us.</p>
+  </div>
+  <div class="timeline" id="timeline-container"></div>
+  <div style="text-align:center;margin-top:3rem;">
+    <button onclick="showHome()" style="background:transparent;color:#555;border:1px solid #333;padding:0.6rem 1.8rem;border-radius:4px;font-size:0.85rem;cursor:pointer;letter-spacing:1px;">↩ Back to Home</button>
+  </div>
+</div>
+
+<!-- ══ REASONS PAGE ══ -->
+<div id="reasons-page">
+  <div class="page-back-bar">
+    <button onclick="showHome()">←</button>
+    <div class="vtitle">💕 Why I Love You</div>
+  </div>
+  <div class="reasons-header">
+    <h2><span>10 Reasons</span> I Love You</h2>
+    <p>Tap each card to reveal ✨</p>
+  </div>
+  <div class="reasons-grid" id="reasons-grid"></div>
+  <div style="text-align:center;margin-top:3rem;padding-bottom:3rem;">
+    <button onclick="showHome()" style="background:transparent;color:#555;border:1px solid #333;padding:0.6rem 1.8rem;border-radius:4px;font-size:0.85rem;cursor:pointer;letter-spacing:1px;">↩ Back to Home</button>
+  </div>
+</div>
+
+<!-- ══ PROMISES PAGE ══ -->
+<div id="promises-page">
+  <div class="page-back-bar">
+    <button onclick="showHome()">←</button>
+    <div class="vtitle">🤝 My Promises</div>
+  </div>
+  <div class="promises-page-inner">
+    <div class="promises-note">
+      <h2>My Promises to You</h2>
+      <div class="promise-item"><div class="promise-check">✓</div><div class="promise-text">I promise to always choose you, even on the hardest days when choosing feels impossible.</div></div>
+      <div class="promise-item"><div class="promise-check">✓</div><div class="promise-text">I promise to be your safe place — where you never have to hide, pretend, or be anything but yourself.</div></div>
+      <div class="promise-item"><div class="promise-check">✓</div><div class="promise-text">I promise to fight for us, not with you — because we are always on the same side.</div></div>
+      <div class="promise-item"><div class="promise-check">✓</div><div class="promise-text">I promise to celebrate your smallest wins as loudly as your biggest ones.</div></div>
+      <div class="promise-item"><div class="promise-check">✓</div><div class="promise-text">I promise to never let you doubt — not for a single moment — how deeply loved you are.</div></div>
+      <div class="promise-item"><div class="promise-check">✓</div><div class="promise-text">I promise to grow with you, not apart from you. Always forward, always together.</div></div>
+      <div class="promise-item"><div class="promise-check">✓</div><div class="promise-text">I promise to remember why I fell in love with you — and fall a little more, every single day.</div></div>
+      <div class="promises-sign">— Romeo ❤️, always yours</div>
+    </div>
+    <button onclick="showHome()" style="background:transparent;color:#555;border:1px solid #333;padding:0.6rem 1.8rem;border-radius:4px;font-size:0.85rem;cursor:pointer;letter-spacing:1px;margin-top:2rem;">↩ Back to Home</button>
+  </div>
+</div>
+
+<!-- ══ STAR WISH PAGE ══ -->
+<div id="starwish-page">
+  <div class="page-back-bar" style="background:transparent;">
+    <button onclick="showHome()">←</button>
+    <div class="vtitle">⭐ Wish Upon a Star</div>
+  </div>
+  <canvas id="starwish-canvas"></canvas>
+  <div class="starwish-hint" id="starwish-hint">
+    <h3>✨ Click any star ✨</h3>
+    <p>Each one holds a secret message for you</p>
+  </div>
+</div>
+
+<!-- ══ CREDITS ══ -->
+<div id="credits">
+  <div class="credits-bg"></div>
+  <div class="floating-hearts" id="hearts"></div>
+  <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" class="credits-logo-img" alt="Netflix">
+  <div class="credits-sub">presents</div>
+  <div class="credits-photo-wrapper" style="cursor: default; pointer-events: none;">
+    <div class="credits-photo"><img id="credits-photo-img" src="card1.jpg" alt="Romeo & Juliet"></div>
+  </div>
+  <h2 class="credits-title">Life of <span>Romeo & Juliet</span></h2>
+  <div class="credits-divider"></div>
+  <p class="credits-message">
+    Juliet,<br><br>
+    I don't know if you realize this, but you changed everything.<br>
+    Not in a dramatic, movie-scene kind of way — but quietly, softly,<br>
+    the way sunlight sneaks into a room and suddenly<br>
+    everything looks warmer than before.<br><br>
+    <em>That's what you did to my life.</em><br><br>
+    Before you, I was just passing through days.<br>
+    With you, I started <em>living</em> them.<br><br>
+    <em>You are my home. You always will be.</em><br><br>
+    I love you. Not just today. Every day. Always.<br><br>
+    — <em>Romeo</em> ❤️
+  </p>
+  <div class="credits-divider"></div>
+  <div class="credits-roll">
+    <div class="cr-row"><span>Directed by</span><span>Destiny & Romeo</span></div>
+    <div class="cr-row"><span>Written by</span><span>Two Hearts</span></div>
+    <div class="cr-row"><span>Starring</span><span>Juliet & Romeo</span></div>
+    <div class="cr-row"><span>Produced by</span><span>God Himself</span></div>
+    <div class="cr-row"><span>Music by</span><span>Every Song That Reminded Me of You</span></div>
+    <div class="cr-row"><span>Soundtrack</span><span>Our Memories</span></div>
+    <div class="cr-row"><span>Genre</span><span>Love. Just Love.</span></div>
+    <div class="cr-row"><span>Rating</span><span>∞ / 10</span></div>
+  </div>
+  <div class="credits-end">— THE BEST STORY IS STILL BEING WRITTEN —</div>
+  <div style="margin-top:3rem;">
+    <button onclick="showHome()" style="background:transparent;color:#555;border:1px solid #333;padding:0.6rem 1.8rem;border-radius:4px;font-size:0.85rem;cursor:pointer;letter-spacing:1px;">↩ Back to Home</button>
+  </div>
+</div>
+
+<!-- Link to external JS module -->
+<script type="module" src="script.js"></script>
+</body>
+</html>
